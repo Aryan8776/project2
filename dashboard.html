@@ -4,7 +4,1342 @@
   <meta charset="UTF-8" />
   <title>Child Health Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" cro<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Child Health Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at top left, #2f4369 0, #1f2933 35%, #111827 100%);
+      --primary: #6366f1;
+      --primary-soft: rgba(99, 102, 241, 0.16);
+      --primary-strong: #4f46e5;
+      --accent: #f97316;
+      --card-bg: rgba(15, 23, 42, 0.82);
+      --border-subtle: rgba(148, 163, 184, 0.35);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --text-soft: #6b7280;
+      --glass-shadow: 0 24px 60px rgba(15, 23, 42, 0.7);
+      --radius-xl: 18px;
+      --radius-lg: 14px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* APP SHELL */
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    @media (max-width: 900px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      position: relative;
+      padding: 20px 18px;
+      border-right: 1px solid rgba(148, 163, 184, 0.25);
+      background: linear-gradient(
+        180deg,
+        rgba(15, 23, 42, 0.96) 0%,
+        rgba(15, 23, 42, 0.9) 50%,
+        rgba(17, 24, 39, 0.96) 100%
+      );
+      backdrop-filter: blur(22px);
+      z-index: 20;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .logo-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 0 0, #f97316, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #f9fafb;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
+    }
+
+    .brand-text-main { font-size: 18px; font-weight: 600; letter-spacing: .02em; }
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+      margin: 18px 4px 8px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-links li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      transition: background .15s ease, transform .1s ease, box-shadow .15s ease, color .15s ease;
+    }
+
+    .nav-links li a .icon-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.8);
+    }
+
+    .nav-links li a:hover {
+      background: rgba(15, 23, 42, 0.96);
+      transform: translateY(-1px);
+      color: #e5e7eb;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
+    }
+
+    .nav-links li a.active {
+      background: rgba(37, 99, 235, 0.16);
+      border: 1px solid rgba(129, 140, 248, 0.9);
+      color: #e5e7eb;
+    }
+
+    .nav-links li a.active .icon-dot {
+      background: #6366f1;
+    }
+
+    .sidebar-footer {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .badge-soft {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* MAIN */
+
+    .main {
+      padding: 20px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        padding: 16px;
+      }
+    }
+
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+
+    .page-title h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
+
+    .page-subtitle {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #logout-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      transition: background .15s ease, transform .1s ease, box-shadow .15s ease;
+    }
+
+    #logout-btn:hover {
+      background: rgba(31, 41, 55, 0.98);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.9);
+    }
+
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 0 0, #f97316, #6366f1);
+      color: #f9fafb;
+      font-weight: 600;
+      font-size: 15px;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
+    }
+
+    /* MODULE STRIP */
+
+    .modules-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 1100px) {
+      .modules-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .modules-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .module-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 14px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      padding: 10px 12px;
+      cursor: pointer;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.85);
+      transition: background .18s ease, transform .1s ease, box-shadow .18s ease, border .18s ease;
+    }
+
+    .module-card:hover {
+      background: rgba(31, 41, 55, 0.98);
+      transform: translateY(-1px);
+      box-shadow: 0 22px 48px rgba(15, 23, 42, 0.95);
+      border-color: rgba(129, 140, 248, 0.9);
+    }
+
+    .module-card.active {
+      border-color: rgba(129, 140, 248, 1);
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.2), rgba(15, 23, 42, 0.96));
+    }
+
+    .module-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .module-title-row h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .module-chip {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--text-soft);
+    }
+
+    .module-footnote {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    /* GRID + CARDS */
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: flex-start;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 1100px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--glass-shadow);
+      padding: 16px 16px 14px;
+      backdrop-filter: blur(24px);
+    }
+
+    .card + .card {
+      margin-top: 12px;
+    }
+
+    h2.section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .section-title span.label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-pill {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      color: var(--text-soft);
+    }
+
+    .section-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+      margin-top: 4px;
+    }
+
+    .metric-pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metric-label {
+      color: var(--text-soft);
+    }
+
+    .metric-value {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .status-text {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+    }
+
+    .section-note {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    /* ID CARD */
+
+    .id-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding-top: 4px;
+    }
+
+    .id-primary {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+
+    .id-primary span.label-small {
+      font-size: 11px;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .id-name-display {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .id-photo {
+      width: 88px;
+      height: 88px;
+      border-radius: 18px;
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-soft);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    /* TABLES */
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 7px 6px;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--text-soft);
+      border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      transition: background .12s ease, transform .08s ease, box-shadow .12s ease;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(15, 23, 42, 0.96);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.9);
+    }
+
+    .table-empty {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .table-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .table-tools input,
+    .table-tools select {
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      font-size: 12px;
+      outline: none;
+      transition: border .15s ease, box-shadow .15s ease, transform .1s ease, background .15s ease;
+    }
+
+    .table-tools input::placeholder {
+      color: rgba(148, 163, 184, 0.8);
+    }
+
+    .table-tools input:focus,
+    .table-tools select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.7);
+      background: rgba(15, 23, 42, 0.98);
+      transform: translateY(-1px);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .pill-given {
+      background: rgba(16, 185, 129, 0.18);
+      color: #bbf7d0;
+      border: 1px solid rgba(16, 185, 129, 0.8);
+    }
+
+    .pill-missed {
+      background: rgba(248, 113, 113, 0.18);
+      color: #fecaca;
+      border: 1px solid rgba(248, 113, 113, 0.8);
+    }
+
+    .pill-scheduled {
+      background: rgba(59, 130, 246, 0.16);
+      color: #bfdbfe;
+      border: 1px solid rgba(59, 130, 246, 0.7);
+    }
+
+    .pill-completed {
+      background: rgba(22, 163, 74, 0.18);
+      color: #bbf7d0;
+      border: 1px solid rgba(22, 163, 74, 0.8);
+    }
+
+    .pill-cancelled {
+      background: rgba(148, 163, 184, 0.18);
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .skeleton-row .skeleton {
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        rgba(31, 41, 55, 1),
+        rgba(55, 65, 81, 0.9),
+        rgba(31, 41, 55, 1)
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .link-small {
+      font-size: 11px;
+      color: #bfdbfe;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(191, 219, 254, 0.6);
+      padding-bottom: 1px;
+      cursor: pointer;
+    }
+
+    .link-small:hover {
+      color: #e5e7eb;
+      border-color: #e5e7eb;
+    }
+
+    /* TOAST */
+
+    #toast {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.98);
+      color: #ecfdf5;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.9);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 40;
+    }
+
+    #toast.error {
+      background: rgba(220, 38, 38, 0.98);
+      color: #fee2e2;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    @media (max-width: 600px) {
+      #toast {
+        left: 10px;
+        right: 10px;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+  </style>
+</head>
+<body id="top">
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-badge">C</div>
+        <div>
+          <div class="brand-text-main">Child Health</div>
+          <div class="brand-text-sub">Smart Care Tracker</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section-title">Navigation</div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#top" class="active"><span class="icon-dot"></span>Overview</a></li>
+        <li><a href="vaccinations.html"><span class="icon-dot"></span>Vaccinations</a></li>
+        <li><a href="appointments.html"><span class="icon-dot"></span>Appointments</a></li>
+        <li><a href="profile.html"><span class="icon-dot"></span>Child Profile</a></li>
+        <li><a href="history.html"><span class="icon-dot"></span>Medical History</a></li>
+        <li><a href="diet.html"><span class="icon-dot"></span>Diet &amp; Nutrition</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <span>Overview only · Read-only</span>
+        <span class="badge-soft">Dashboard</span>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <header class="main-header">
+        <div class="page-title">
+          <h1>Child Health Dashboard</h1>
+          <div class="page-subtitle">Overview of vaccinations, visits, profile, history and diet.</div>
+        </div>
+        <div class="user-chip">
+          <button id="logout-btn">Logout</button>
+          <div class="profile-icon" id="profile-icon">U</div>
+        </div>
+      </header>
+
+      <!-- MODULE CARDS -->
+      <section class="modules-strip">
+        <div class="module-card" data-target="#section-vaccination">
+          <div class="module-title-row">
+            <h3>Vaccinations</h3>
+            <span class="module-chip">Schedule &amp; status</span>
+          </div>
+          <div class="module-footnote">Keep every dose on time.</div>
+        </div>
+
+        <div class="module-card" data-target="#section-appointments">
+          <div class="module-title-row">
+            <h3>Appointments</h3>
+            <span class="module-chip">Visits &amp; follow-ups</span>
+          </div>
+          <div class="module-footnote">Plan and review doctor visits.</div>
+        </div>
+
+        <div class="module-card" data-target="#section-id">
+          <div class="module-title-row">
+            <h3>Child Profile</h3>
+            <span class="module-chip">Virtual ID</span>
+          </div>
+          <div class="module-footnote">One place for key details.</div>
+        </div>
+
+        <div class="module-card" data-target="#section-history">
+          <div class="module-title-row">
+            <h3>Medical History</h3>
+            <span class="module-chip">Overview</span>
+          </div>
+          <div class="module-footnote">See recent illnesses &amp; notes.</div>
+        </div>
+      </section>
+
+      <!-- TOP GRID: ID + VACC -->
+      <section class="grid-2">
+        <!-- VIRTUAL ID -->
+        <div class="card" id="section-id">
+          <h2 class="section-title">
+            <span class="label">
+              Virtual ID Card
+            </span>
+            <span class="section-pill">Personal Details</span>
+          </h2>
+          <p class="status-text">
+            This card summarizes key information about your child linked to this account.
+          </p>
+          <div class="id-card">
+            <div class="id-primary">
+              <span class="label-small">Child Name</span>
+              <div class="id-name-display" id="id-name">Loading.</div>
+              <span class="label-small" style="margin-top:6px;">Parent Email</span>
+              <div id="id-parent-email" style="font-size:13px;">-</div>
+            </div>
+            <div class="id-photo">
+              Photo
+            </div>
+          </div>
+        </div>
+
+        <!-- VACCINATION OVERVIEW -->
+        <div class="card" id="section-vaccination">
+          <h2 class="section-title">
+            <span class="label">
+              Vaccination Record
+            </span>
+            <span class="section-pill" id="vaccination-count-pill">0 records</span>
+          </h2>
+
+          <div class="section-metrics" id="vacc-metrics"></div>
+
+          <p class="status-text" id="vaccination-status">
+            Showing vaccination records (read-only). Use the Vaccinations page to add or edit records.
+          </p>
+
+          <div class="table-tools">
+            <input type="text" id="vacc-search" placeholder="Search vaccine." />
+            <select id="vacc-filter-status">
+              <option value="all">All statuses</option>
+              <option value="Scheduled">Scheduled only</option>
+              <option value="Given">Given only</option>
+              <option value="Missed">Missed only</option>
+            </select>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Vaccine</th>
+                <th>Scheduled</th>
+                <th>Given</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="vaccinationBody">
+              <tr class="skeleton-row">
+                <td><div class="skeleton"></div></td>
+                <td><div class="skeleton"></div></td>
+                <td><div class="skeleton"></div></td>
+                <td><div class="skeleton"></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- APPOINTMENTS + HISTORY/DIET -->
+      <section class="grid-2">
+        <!-- APPOINTMENTS -->
+        <div class="card" id="section-appointments">
+          <h2 class="section-title">
+            <span class="label">
+              Appointments
+            </span>
+            <span class="section-pill" id="appointments-count-pill">0 appointments</span>
+          </h2>
+
+          <div class="section-metrics" id="app-metrics"></div>
+
+          <p class="status-text" id="appointments-status">
+            Showing appointments (read-only). Use the Appointments page to add or edit visits.
+          </p>
+
+          <div class="table-tools">
+            <select id="app-filter-status">
+              <option value="all">All statuses</option>
+              <option value="Scheduled">Scheduled only</option>
+              <option value="Completed">Completed only</option>
+              <option value="Cancelled">Cancelled only</option>
+            </select>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Purpose</th>
+                <th>Doctor</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="appointmentsBody">
+              <tr class="skeleton-row">
+                <td><div class="skeleton"></div></td>
+                <td><div class="skeleton"></div></td>
+                <td><div class="skeleton"></div></td>
+                <td><div class="skeleton"></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- HISTORY + DIET OVERVIEW (right column, same layout, no forms) -->
+        <div>
+          <!-- MEDICAL HISTORY OVERVIEW -->
+          <div class="card" id="section-history">
+            <h2 class="section-title">
+              <span class="label">Medical History</span>
+              <span class="section-pill" id="history-total-chip">Total records: 0</span>
+            </h2>
+            <p class="status-text">
+              Recent medical events (read-only). Use the Medical History page to add or edit records.
+            </p>
+            <p class="section-note" id="history-main-line">No history recorded.</p>
+            <p class="section-note" id="history-sub-line">
+              Add visits, allergies or illnesses in the Medical History page.
+            </p>
+            <div style="margin-top:8px;">
+              <a class="link-small" href="history.html">View medical history →</a>
+            </div>
+          </div>
+
+          <!-- DIET OVERVIEW -->
+          <div class="card" id="section-diet">
+            <h2 class="section-title">
+              <span class="label">Diet &amp; Nutrition</span>
+              <span class="section-pill" id="diet-total-chip">Total logged: 0</span>
+            </h2>
+            <p class="status-text">
+              Summary from your diet logs (read-only). Use the Diet & Nutrition page to add or edit meals.
+            </p>
+            <p class="section-note" id="diet-today-count">0 meals today</p>
+            <p class="section-note" id="diet-last-text">No recent meals logged.</p>
+            <div style="margin-top:8px;">
+              <a class="link-small" href="diet.html">View diet &amp; nutrition →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://hfytpmyqvdzdehembdpr.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmeXRwbXlxdmR6ZGVoZW1iZHByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNTg3NzIsImV4cCI6MjA3NzkzNDc3Mn0.IBvAlibQX4ZpQeC1FMTPgPaD-2odx42Ec0CkilSGA4Y";
+
+    const { createClient } = supabase;
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let vaccinationCache = [];
+    let appointmentsCache = [];
+
+    function setProfileIcon(user) {
+      const profileIcon = document.getElementById("profile-icon");
+      const email = user.email || "";
+      const letter = email ? email.charAt(0).toUpperCase() : "U";
+      profileIcon.textContent = letter;
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      toast.textContent = "";
+      toast.className = "";
+      if (type === "error") toast.classList.add("error");
+      toast.innerHTML = (type === "error" ? "⚠️ " : "✅ ") + message;
+      toast.classList.add("show");
+      clearTimeout(showToast._timeoutId);
+      showToast._timeoutId = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+    }
+
+    function pillForStatus(status) {
+      if (!status) return "-";
+      const s = status.toLowerCase();
+      if (s === "given") return '<span class="pill pill-given">Given</span>';
+      if (s === "missed") return '<span class="pill pill-missed">Missed</span>';
+      if (s === "completed") return '<span class="pill pill-completed">Completed</span>';
+      if (s === "cancelled") return '<span class="pill pill-cancelled">Cancelled</span>';
+      if (s === "scheduled") return '<span class="pill pill-scheduled">Scheduled</span>';
+      return status;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "-";
+      const d = new Date(dateStr + "T00:00:00");
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+    }
+
+    async function getCurrentUser() {
+      const { data, error } = await sb.auth.getUser();
+      if (error || !data.user) {
+        window.location.href = "index.html";
+        return null;
+      }
+      return data.user;
+    }
+
+    async function loadUserProfile(user) {
+      const nameEl = document.getElementById("id-name");
+      const emailEl = document.getElementById("id-parent-email");
+
+      nameEl.textContent = "Loading.";
+      emailEl.textContent = user.email || "";
+
+      const { data: row, error } = await sb
+        .from("users")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error loading users row:", error);
+        nameEl.textContent = user.user_metadata?.name || "(no name)";
+        return;
+      }
+
+      if (!row) {
+        nameEl.textContent = user.user_metadata?.name || "(no name)";
+      } else {
+        nameEl.textContent = row.name || "(no name)";
+        emailEl.textContent = row.email || user.email || "";
+      }
+    }
+
+    /* VACCINATIONS (READ-ONLY) */
+
+    function renderVaccinationMetrics(data) {
+      const metricsEl = document.getElementById("vacc-metrics");
+      if (!data || data.length === 0) {
+        metricsEl.innerHTML = "";
+        return;
+      }
+      const total = data.length;
+      const given = data.filter(r => (r.status || "").toLowerCase() === "given").length;
+      const scheduled = data.filter(r => (r.status || "").toLowerCase() === "scheduled").length;
+      const missed = data.filter(r => (r.status || "").toLowerCase() === "missed").length;
+
+      metricsEl.innerHTML = `
+        <div class="metric-pill">
+          <span class="metric-label">Total</span>
+          <span class="metric-value">${total}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Given</span>
+          <span class="metric-value">${given}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Scheduled</span>
+          <span class="metric-value">${scheduled}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Missed</span>
+          <span class="metric-value">${missed}</span>
+        </div>
+      `;
+    }
+
+    function renderVaccinationRows() {
+      const tbody = document.getElementById("vaccinationBody");
+      const searchVal = document.getElementById("vacc-search").value.trim().toLowerCase();
+      const statusFilter = document.getElementById("vacc-filter-status").value;
+      tbody.innerHTML = "";
+
+      let filtered = vaccinationCache.slice();
+
+      if (searchVal) {
+        filtered = filtered.filter(row =>
+          (row.vaccine || "").toLowerCase().includes(searchVal)
+        );
+      }
+
+      if (statusFilter !== "all") {
+        filtered = filtered.filter(row => (row.status || "") === statusFilter);
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="table-empty">No vaccinations match this filter.</td></tr>';
+        return;
+      }
+
+      filtered.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.style.opacity = 0;
+        tr.innerHTML = `
+          <td>${row.vaccine || "-"}</td>
+          <td>${formatDate(row.scheduled_date)}</td>
+          <td>${formatDate(row.given_date)}</td>
+          <td>${pillForStatus(row.status)}</td>
+        `;
+        tbody.appendChild(tr);
+        requestAnimationFrame(() => {
+          tr.style.transition = "opacity 0.25s ease";
+          tr.style.opacity = 1;
+        });
+      });
+    }
+
+    async function loadVaccinations(userId) {
+      const tbody = document.getElementById("vaccinationBody");
+      const statusEl = document.getElementById("vaccination-status");
+      const countPill = document.getElementById("vaccination-count-pill");
+      const metricsEl = document.getElementById("vacc-metrics");
+
+      tbody.innerHTML = `
+        <tr class="skeleton-row">
+          <td><div class="skeleton"></div></td>
+          <td><div class="skeleton"></div></td>
+          <td><div class="skeleton"></div></td>
+          <td><div class="skeleton"></div></td>
+        </tr>
+      `;
+      metricsEl.innerHTML = "";
+
+      const { data, error } = await sb
+        .from("vaccinations")
+        .select("vaccine, scheduled_date, given_date, status, user_id")
+        .eq("user_id", userId)
+        .order("scheduled_date", { ascending: true });
+
+      if (error) {
+        console.error("Vaccinations fetch error:", error);
+        tbody.innerHTML = '<tr><td colspan="4" class="table-empty">Error loading data</td></tr>';
+        statusEl.textContent = "Error loading vaccinations.";
+        countPill.textContent = "0 records";
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="table-empty">No vaccinations yet.</td></tr>';
+        statusEl.textContent = "No vaccinations found yet.";
+        countPill.textContent = "0 records";
+        metricsEl.innerHTML = "";
+        vaccinationCache = [];
+        return;
+      }
+
+      vaccinationCache = data;
+      statusEl.textContent = "Showing vaccination records (read-only).";
+      countPill.textContent = data.length + (data.length === 1 ? " record" : " records");
+      renderVaccinationMetrics(data);
+      renderVaccinationRows();
+    }
+
+    /* APPOINTMENTS (READ-ONLY) */
+
+    function renderAppointmentMetrics(data) {
+      const metricsEl = document.getElementById("app-metrics");
+      if (!data || data.length === 0) {
+        metricsEl.innerHTML = "";
+        return;
+      }
+
+      const total = data.length;
+      const scheduled = data.filter(r => (r.status || "").toLowerCase() === "scheduled").length;
+      const completed = data.filter(r => (r.status || "").toLowerCase() === "completed").length;
+      const cancelled = data.filter(r => (r.status || "").toLowerCase() === "cancelled").length;
+
+      metricsEl.innerHTML = `
+        <div class="metric-pill">
+          <span class="metric-label">Total</span>
+          <span class="metric-value">${total}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Scheduled</span>
+          <span class="metric-value">${scheduled}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Completed</span>
+          <span class="metric-value">${completed}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Cancelled</span>
+          <span class="metric-value">${cancelled}</span>
+        </div>
+      `;
+    }
+
+    function renderAppointmentRows() {
+      const tbody = document.getElementById("appointmentsBody");
+      const statusFilter = document.getElementById("app-filter-status").value;
+      tbody.innerHTML = "";
+
+      let filtered = appointmentsCache.slice();
+
+      if (statusFilter !== "all") {
+        filtered = filtered.filter(row => (row.status || "") === statusFilter);
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="table-empty">No appointments match this filter.</td></tr>';
+        return;
+      }
+
+      filtered.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.style.opacity = 0;
+        tr.innerHTML = `
+          <td>${formatDate(row.date)}</td>
+          <td>${row.purpose || "-"}</td>
+          <td>${row.doctor || "-"}</td>
+          <td>${pillForStatus(row.status)}</td>
+        `;
+        tbody.appendChild(tr);
+        requestAnimationFrame(() => {
+          tr.style.transition = "opacity 0.25s ease";
+          tr.style.opacity = 1;
+        });
+      });
+    }
+
+    async function loadAppointments(userId) {
+      const tbody = document.getElementById("appointmentsBody");
+      const statusEl = document.getElementById("appointments-status");
+      const countPill = document.getElementById("appointments-count-pill");
+      const metricsEl = document.getElementById("app-metrics");
+
+      tbody.innerHTML = `
+        <tr class="skeleton-row">
+          <td><div class="skeleton"></div></td>
+          <td><div class="skeleton"></div></td>
+          <td><div class="skeleton"></div></td>
+          <td><div class="skeleton"></div></td>
+        </tr>
+      `;
+      metricsEl.innerHTML = "";
+
+      const { data, error } = await sb
+        .from("appointments")
+        .select("date, purpose, doctor, status, user_id")
+        .eq("user_id", userId)
+        .order("date", { ascending: true });
+
+      if (error) {
+        console.error("Appointments fetch error:", error);
+        tbody.innerHTML = '<tr><td colspan="4" class="table-empty">Error loading data</td></tr>';
+        statusEl.textContent = "Error loading appointments.";
+        countPill.textContent = "0 appointments";
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="table-empty">No appointments yet.</td></tr>';
+        statusEl.textContent = "No appointments found yet.";
+        countPill.textContent = "0 appointments";
+        metricsEl.innerHTML = "";
+        appointmentsCache = [];
+        return;
+      }
+
+      appointmentsCache = data;
+      statusEl.textContent = "Showing appointments (read-only).";
+      countPill.textContent = data.length + (data.length === 1 ? " appointment" : " appointments");
+      renderAppointmentMetrics(data);
+      renderAppointmentRows();
+    }
+
+    /* MEDICAL HISTORY OVERVIEW (READ-ONLY) */
+
+    async function loadHistoryOverview(userId) {
+      const mainEl = document.getElementById("history-main-line");
+      const subEl = document.getElementById("history-sub-line");
+      const chip = document.getElementById("history-total-chip");
+
+      const { data, error } = await sb
+        .from("medical_history")
+        .select("date, type, summary, doctor")
+        .eq("user_id", userId)
+        .order("date", { ascending: false });
+
+      if (error) {
+        console.error("Error loading medical history:", error);
+        mainEl.textContent = "Error loading history";
+        subEl.textContent = "Please check Supabase configuration.";
+        chip.textContent = "Total records: 0";
+        return;
+      }
+
+      const rows = data || [];
+      chip.textContent = "Total records: " + rows.length;
+
+      if (rows.length === 0) {
+        mainEl.textContent = "No history recorded.";
+        subEl.textContent = "Add visits, allergies or illnesses in the Medical History page.";
+        return;
+      }
+
+      const last = rows[0];
+      const dateStr = formatDate(last.date);
+      const typeStr = last.type || "Visit";
+      const docStr = last.doctor ? " · " + last.doctor : "";
+
+      mainEl.textContent = `${typeStr}${docStr}`;
+      subEl.textContent = `${dateStr} – ${last.summary || "No summary"}`;
+    }
+
+    /* DIET OVERVIEW (READ-ONLY) */
+
+    async function loadDietOverview(userId) {
+      const todayCountEl = document.getElementById("diet-today-count");
+      const lastTextEl = document.getElementById("diet-last-text");
+      const totalChip = document.getElementById("diet-total-chip");
+
+      const { data, error } = await sb
+        .from("diet_logs")
+        .select("date, type, summary")
+        .eq("user_id", userId)
+        .order("date", { ascending: false });
+
+      if (error) {
+        console.error("Error loading diet logs:", error);
+        todayCountEl.textContent = "0 meals today";
+        lastTextEl.textContent = "Error loading diet logs.";
+        totalChip.textContent = "Total logged: 0";
+        return;
+      }
+
+      const rows = data || [];
+      const total = rows.length;
+      totalChip.textContent = "Total logged: " + total;
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const todayMeals = rows.filter(r => r.date === todayStr);
+      todayCountEl.textContent = todayMeals.length + (todayMeals.length === 1 ? " meal today" : " meals today");
+
+      if (rows.length === 0) {
+        lastTextEl.textContent = "No recent meals logged.";
+        return;
+      }
+
+      const last = rows[0];
+      const dateStr = formatDate(last.date);
+      lastTextEl.textContent = `${dateStr} – ${last.type || "Meal"}: ${last.summary || "No details"}`;
+    }
+
+    /* UI HELPERS */
+
+    function initModuleCardScroll() {
+      const cards = document.querySelectorAll(".module-card");
+      cards.forEach(card => {
+        card.addEventListener("click", () => {
+          const targetSelector = card.getAttribute("data-target");
+          if (targetSelector) {
+            const section = document.querySelector(targetSelector);
+            if (section) {
+              section.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }
+          cards.forEach(c => c.classList.remove("active"));
+          card.classList.add("active");
+          setTimeout(() => card.classList.remove("active"), 800);
+        });
+      });
+    }
+
+    function initSidebarActiveLinks() {
+      const links = document.querySelectorAll("#nav-links a");
+      links.forEach(link => {
+        link.addEventListener("click", () => {
+          links.forEach(l => l.classList.remove("active"));
+          link.classList.add("active");
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      initModuleCardScroll();
+      initSidebarActiveLinks();
+
+      const user = await getCurrentUser();
+      if (!user) return;
+
+      setProfileIcon(user);
+      await loadUserProfile(user);
+
+      const userId = user.id;
+
+      document.getElementById("logout-btn").addEventListener("click", async () => {
+        await sb.auth.signOut();
+        window.location.href = "index.html";
+      });
+
+      // READ-ONLY data loads
+      loadVaccinations(userId);
+      loadAppointments(userId);
+      loadHistoryOverview(userId);
+      loadDietOverview(userId);
+
+      // filters/search
+      document.getElementById("vacc-search").addEventListener("input", renderVaccinationRows);
+      document.getElementById("vacc-filter-status").addEventListener("change", renderVaccinationRows);
+      document.getElementById("app-filter-status").addEventListener("change", renderAppointmentRows);
+    });
+  </script>
+</body>
+</html>
+ssorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -1518,3 +2853,4 @@
   </script>
 </body>
 </html>
+
