@@ -30,20 +30,15 @@
       color: var(--text-main);
     }
 
-    /* APP SHELL */
     .app-shell {
       display: grid;
       grid-template-columns: 260px minmax(0, 1fr);
       min-height: 100vh;
     }
-
     @media (max-width: 900px) {
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
+      .app-shell { grid-template-columns: 1fr; }
     }
 
-    /* SIDEBAR */
     .sidebar {
       padding: 20px 18px;
       border-right: 1px solid rgba(148, 163, 184, 0.3);
@@ -158,14 +153,12 @@
       color: var(--text-muted);
     }
 
-    /* MAIN */
     .main {
       padding: 20px 24px 24px;
       display: flex;
       flex-direction: column;
       gap: 18px;
     }
-
     @media (max-width: 600px) {
       .main { padding: 16px; }
     }
@@ -224,7 +217,6 @@
       color: #f9fafb;
     }
 
-    /* GRID + CARDS */
     .grid-2 {
       display: grid;
       grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
@@ -280,7 +272,7 @@
       margin-bottom: 4px;
     }
 
-    input, select {
+    input, select, textarea {
       width: 100%;
       padding: 7px 10px;
       border-radius: 999px;
@@ -291,42 +283,51 @@
       outline: none;
       transition: border 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease, background 0.15s ease;
     }
+    textarea {
+      border-radius: 14px;
+      min-height: 70px;
+      resize: vertical;
+    }
 
-    input::placeholder { color: rgba(148, 163, 184, 0.9); }
+    input::placeholder, textarea::placeholder { color: rgba(148, 163, 184, 0.9); }
 
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.7);
-      transform: translateY(-1px);
       background: rgba(15, 23, 42, 0.98);
+      transform: translateY(-1px);
     }
 
     .btn-primary {
       margin-top: 4px;
-      padding: 8px 18px;
       border-radius: 999px;
       border: 1px solid rgba(129, 140, 248, 0.9);
-      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
-      color: #f9fafb;
+      padding: 8px 18px;
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
-      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.9);
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.9);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
     }
 
     .btn-primary:hover:not(:disabled) {
       transform: translateY(-1px);
-      filter: brightness(1.05);
-      box-shadow: 0 22px 46px rgba(15, 23, 42, 0.95);
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 1);
+      opacity: 0.98;
     }
 
-    .btn-primary:disabled { opacity: 0.7; cursor: default; box-shadow: none; }
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: default;
+      box-shadow: none;
+    }
 
-    /* table */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -334,53 +335,35 @@
       font-size: 12px;
     }
 
-    thead {
-      background: rgba(15, 23, 42, 0.96);
-    }
+    thead { background: rgba(15, 23, 42, 0.96); }
 
     th, td {
       padding: 7px 8px;
       text-align: left;
-    }
-
-    th {
-      color: var(--text-soft);
-      font-weight: 500;
       border-bottom: 1px solid rgba(31, 41, 55, 0.9);
     }
 
-    tbody tr {
-      border-bottom: 1px solid rgba(31, 41, 55, 0.85);
-      transition: background 0.12s ease, transform 0.06s ease, box-shadow 0.12s ease;
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
     }
 
-    tbody tr:last-child { border-bottom: none; }
-
-    tbody tr:hover {
-      background: rgba(15, 23, 42, 0.96);
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.85);
-    }
+    tbody tr:hover { background: rgba(15, 23, 42, 0.96); }
 
     .table-empty {
       text-align: center;
       font-size: 12px;
       color: var(--text-soft);
+      padding: 16px 8px;
     }
 
-    .stat-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .stat-pill {
+    .pill-count {
       font-size: 11px;
-      padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.96);
+      padding: 3px 8px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
       color: var(--text-soft);
     }
 
@@ -392,7 +375,6 @@
       align-items: center;
     }
 
-    /* Toast (re-use simple one) */
     #toast {
       position: fixed;
       bottom: 18px;
@@ -493,65 +475,61 @@
                 <label for="meal-type">Meal</label>
                 <select id="meal-type">
                   <option>Breakfast</option>
-                  <option>Mid-morning snack</option>
                   <option>Lunch</option>
-                  <option>Evening snack</option>
+                  <option>Snack</option>
                   <option>Dinner</option>
                 </select>
               </div>
-              <div>
-                <label for="meal-items">Food items</label>
-                <input id="meal-items" type="text" placeholder="e.g. idli, milk, fruits" />
+            </div>
+
+            <div class="form-grid">
+              <div style="grid-column:1/-1;">
+                <label for="meal-items">What was eaten?</label>
+                <textarea id="meal-items" placeholder="E.g. Poha, milk, fruits..."></textarea>
               </div>
-              <div>
-                <label for="meal-notes">Notes</label>
-                <input id="meal-notes" type="text" placeholder="Allergy-safe, extra fluids…" />
+              <div style="grid-column:1/-1;">
+                <label for="meal-notes">Notes (optional)</label>
+                <textarea id="meal-notes" placeholder="Water intake, likes/dislikes, digestion notes..."></textarea>
               </div>
             </div>
-            <button class="btn-primary" type="submit" id="diet-submit-btn">
+
+            <button type="submit" class="btn-primary" id="diet-submit-btn">
               <span>Add meal</span>
             </button>
           </form>
         </div>
 
-        <!-- RIGHT: TABLE / OVERVIEW -->
+        <!-- RIGHT: TABLE & STATS -->
         <div class="card">
           <div class="section-header">
             <div>
-              <h2>Recent Meals</h2>
-              <div class="section-sub">Showing meals saved in Supabase.</div>
+              <h2>Meal log</h2>
+              <div class="section-sub">See recent meals logged for this child.</div>
+            </div>
+            <div class="toolbar">
+              <span class="pill-count" id="diet-total-pill">Total meals: 0</span>
+              <span class="pill-count" id="diet-today-pill">Today: 0</span>
+              <select id="diet-filter-type" style="min-width:130px;">
+                <option value="all">All meals</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Snack">Snack</option>
+                <option value="Dinner">Dinner</option>
+              </select>
             </div>
           </div>
 
-          <div class="stat-row" id="diet-stats">
-            <div class="stat-pill" id="diet-total-pill">Total meals: 0</div>
-            <div class="stat-pill" id="diet-today-pill">Today: 0</div>
-          </div>
-
-          <div class="toolbar">
-            <select id="diet-filter-type">
-              <option value="all">All meals</option>
-              <option value="Breakfast">Breakfast</option>
-              <option value="Mid-morning snack">Mid-morning snack</option>
-              <option value="Lunch">Lunch</option>
-              <option value="Evening snack">Evening snack</option>
-              <option value="Dinner">Dinner</option>
-            </select>
-          </div>
-
-          <table id="meal-table">
+          <table>
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Meal</th>
-                <th>Food items</th>
+                <th>Items</th>
                 <th>Notes</th>
               </tr>
             </thead>
             <tbody id="dietBody">
-              <tr>
-                <td colspan="4" class="table-empty">Loading meals…</td>
-              </tr>
+              <tr><td colspan="4" class="table-empty">No meals logged yet.</td></tr>
             </tbody>
           </table>
         </div>
@@ -561,7 +539,6 @@
 
   <div id="toast"></div>
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://hfytpmyqvdzdehembdpr.supabase.co";
@@ -574,15 +551,12 @@
 
     function showToast(message, type = "success") {
       const toast = document.getElementById("toast");
-      toast.textContent = "";
+      toast.textContent = message;
       toast.className = "";
-      if (type === "error") toast.classList.add("error");
-      toast.innerHTML = (type === "error" ? "⚠️ " : "✅ ") + message;
+      toast.classList.add(type === "error" ? "error" : "");
       toast.classList.add("show");
       clearTimeout(showToast._timeoutId);
-      showToast._timeoutId = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
+      showToast._timeoutId = setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
     function setButtonLoading(buttonId, isLoading, defaultText) {
@@ -590,10 +564,10 @@
       if (!btn) return;
       if (isLoading) {
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner" style="width:12px;height:12px;border-radius:999px;border:2px solid rgba(248,250,252,0.5);border-top-color:#f9fafb;display:inline-block;animation:spin 0.7s linear infinite;"></span><span>Saving...</span>';
+        btn.innerHTML = "<span>Saving...</span>";
       } else {
         btn.disabled = false;
-        btn.innerHTML = '<span>' + defaultText + '</span>';
+        btn.innerHTML = "<span>" + defaultText + "</span>";
       }
     }
 
@@ -697,11 +671,15 @@
 
       if (!type || !items) return;
 
+      const user = await getCurrentUser();   // 👈 get user
+      if (!user) return;
+
       setButtonLoading("diet-submit-btn", true, "Add meal");
 
       const { error } = await sb
         .from("diet_logs")
         .insert({
+          user_id: user.id,                 // 👈 IMPORTANT
           date: date,
           type: type,
           summary: items,
@@ -719,11 +697,7 @@
 
       e.target.reset();
       showToast("Meal saved");
-
-      const user = await getCurrentUser();
-      if (user) {
-        await loadDiet(user.id);
-      }
+      await loadDiet(user.id);
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
