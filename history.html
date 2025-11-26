@@ -43,6 +43,7 @@
     }
     .brand-text-main{font-size:17px;font-weight:600;letter-spacing:.02em;}
     .brand-text-sub{font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:.16em;}
+
     .sidebar-section-title{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--text-soft);margin:16px 4px 8px;}
     .nav-links{list-style:none;display:flex;flex-direction:column;gap:4px;}
     .nav-links li a{
@@ -101,7 +102,7 @@
     }
 
     .grid-2{
-      display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+      display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
       gap:16px;align-items:flex-start;
     }
     @media(max-width:1000px){.grid-2{grid-template-columns:1fr;}}
@@ -135,15 +136,20 @@
     label{
       font-size:11px;color:var(--text-soft);display:block;margin-bottom:4px;
     }
-    input,select{
+    input,select,textarea{
       width:100%;padding:7px 10px;border-radius:999px;
       border:1px solid rgba(55,65,81,0.85);
       background:rgba(15,23,42,0.92);
       color:#e5e7eb;font-size:12px;outline:none;
       transition:border .15s ease,box-shadow .15s ease,transform .1s ease,background .15s ease;
     }
-    input::placeholder{color:rgba(148,163,184,0.9);}
-    input:focus,select:focus{
+    textarea{
+      border-radius:14px;
+      min-height:70px;
+      resize:vertical;
+    }
+    input::placeholder,textarea::placeholder{color:rgba(148,163,184,0.9);}
+    input:focus,select:focus,textarea:focus{
       border-color:var(--primary);
       box-shadow:0 0 0 1px rgba(129,140,248,0.7);
       transform:translateY(-1px);
@@ -169,51 +175,34 @@
       width:100%;border-collapse:collapse;margin-top:10px;font-size:12px;
     }
     thead{background:rgba(15,23,42,0.96);}
-    th,td{padding:7px 8px;text-align:left;}
+    th,td{padding:7px 8px;text-align:left;border-bottom:1px solid rgba(31,41,55,0.9);}
     th{
-      color:var(--text-soft);font-weight:500;
-      border-bottom:1px solid rgba(31,41,55,0.9);
+      font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-soft);
     }
-    tbody tr{
-      border-bottom:1px solid rgba(31,41,55,0.85);
-      transition:background .12s ease,transform .06s ease,box-shadow .12s ease;
-    }
-    tbody tr:last-child{border-bottom:none;}
-    tbody tr:hover{
-      background:rgba(15,23,42,0.96);
-      transform:translateY(-1px);
-      box-shadow:0 10px 22px rgba(15,23,42,0.85);
-    }
-    .table-empty{text-align:center;font-size:12px;color:var(--text-soft);}
+    tbody tr:hover{background:rgba(15,23,42,0.96);}
 
-    .pill{
-      display:inline-flex;align-items:center;
-      padding:3px 8px;border-radius:999px;
-      font-size:11px;font-weight:500;
-    }
-    .pill-attention{background:rgba(248,113,113,0.18);color:#fecaca;border:1px solid rgba(248,113,113,0.8);}
-    .pill-info{background:rgba(59,130,246,0.16);color:#bfdbfe;border:1px solid rgba(59,130,246,0.7);}
-
-    .toolbar{
-      margin-top:8px;
-      display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    .table-empty{
+      text-align:center;font-size:12px;color:var(--text-soft);padding:16px 8px;
     }
 
-    #toast{
+    .pill-count{
+      font-size:11px;border-radius:999px;
+      padding:3px 8px;border:1px solid rgba(148,163,184,0.6);
+      color:var(--text-soft);
+    }
+
+    /* Toast */
+    .toast{
       position:fixed;bottom:18px;right:18px;
       padding:8px 14px;border-radius:999px;font-size:12px;
-      background:rgba(22,163,74,0.98);color:#ecfdf5;
+      background:rgba(22,163,74,0.96);color:#ecfdf5;
       box-shadow:0 18px 40px rgba(15,23,42,0.9);
-      opacity:0;transform:translateY(12px);
-      pointer-events:none;transition:opacity .18s ease,transform .18s ease;
+      opacity:0;pointer-events:none;transform:translateY(6px);
+      transition:opacity .18s ease,transform .18s ease;
       z-index:40;
     }
-    #toast.error{background:rgba(220,38,38,0.98);color:#fee2e2;}
-    #toast.show{opacity:1;transform:translateY(0);pointer-events:auto;}
-
-    @media(max-width:600px){
-      #toast{left:10px;right:10px;text-align:center;}
-    }
+    .toast.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+    .toast.error{background:rgba(220,38,38,0.98);color:#fee2e2;}
   </style>
 </head>
 <body>
@@ -238,7 +227,7 @@
         </ul>
       </div>
       <div class="sidebar-footer">
-        <span>Allergies &amp; past events</span>
+        <span>Visits &amp; reports</span>
         <span class="badge-soft">History</span>
       </div>
     </aside>
@@ -247,7 +236,7 @@
       <header class="main-header">
         <div class="page-title">
           <h1>Medical History</h1>
-          <div class="page-subtitle">Allergies, illnesses &amp; important events.</div>
+          <div class="page-subtitle">Log visits, illnesses, allergies and reports.</div>
         </div>
         <div class="user-chip">
           <button class="btn-ghost" onclick="location.href='dashboard.html'">Back to dashboard</button>
@@ -256,13 +245,14 @@
       </header>
 
       <section class="grid-2">
+        <!-- LEFT: ADD / EDIT -->
         <div class="card">
           <div class="section-header">
             <div>
-              <h2>Add Medical Event</h2>
-              <div class="section-sub">Record hospital visits, allergies or illnesses.</div>
+              <h2>Add record</h2>
+              <div class="section-sub">Capture a clinic visit, illness or note.</div>
             </div>
-            <span class="pill-label" id="history-count-pill">0 records</span>
+            <span class="pill-label">New entry</span>
           </div>
 
           <form id="history-form">
@@ -274,66 +264,72 @@
               <div>
                 <label for="hist-type">Type</label>
                 <select id="hist-type">
-                  <option>Fever / Infection</option>
-                  <option>Injury</option>
+                  <option value="">Select</option>
+                  <option>Visit</option>
+                  <option>Illness</option>
                   <option>Allergy</option>
-                  <option>Hospitalisation</option>
+                  <option>Follow-up</option>
                   <option>Other</option>
                 </select>
               </div>
               <div>
-                <label for="hist-summary">Summary</label>
-                <input id="hist-summary" type="text" placeholder="e.g. Viral fever 3 days" />
-              </div>
-              <div>
-                <label for="hist-doctor">Doctor / Hospital</label>
-                <input id="hist-doctor" type="text" placeholder="Clinic name" />
-              </div>
-              <div>
-                <label for="hist-notes">Notes</label>
-                <input id="hist-notes" type="text" placeholder="Medicines, tests, follow-up…" />
-              </div>
-              <div>
-                <label for="hist-report">Report link (optional)</label>
-                <input id="hist-report" type="text" placeholder="URL or file reference" />
+                <label for="hist-doctor">Doctor / clinic</label>
+                <input id="hist-doctor" type="text" placeholder="Dr. Sharma · City Clinic" />
               </div>
             </div>
-            <button class="btn-primary" type="submit" id="history-submit-btn">Save record</button>
+
+            <div class="form-grid">
+              <div style="grid-column:1/-1;">
+                <label for="hist-summary">Summary</label>
+                <textarea id="hist-summary" placeholder="Reason, key findings, treatment..."></textarea>
+              </div>
+              <div style="grid-column:1/-1;">
+                <label for="hist-notes">Notes (optional)</label>
+                <textarea id="hist-notes" placeholder="Follow up in 2 weeks, avoid dust, etc."></textarea>
+              </div>
+              <div style="grid-column:1/-1;">
+                <label for="hist-report">Report link (optional)</label>
+                <input id="hist-report" type="url" placeholder="https:// or file reference" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="history-submit-btn">
+              <span>Save record</span>
+            </button>
           </form>
         </div>
 
+        <!-- RIGHT: TABLE -->
         <div class="card">
           <div class="section-header">
             <div>
-              <h2>History Timeline</h2>
-              <div class="section-sub">Recent medical events.</div>
+              <h2>History records</h2>
+              <div class="section-sub">Recent events for this child account.</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <span class="pill-count" id="history-count-pill">0 records</span>
+              <select id="hist-filter-type" style="min-width:130px;">
+                <option value="all">All types</option>
+                <option value="Visit">Visit</option>
+                <option value="Illness">Illness</option>
+                <option value="Allergy">Allergy</option>
+                <option value="Follow-up">Follow-up</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
           </div>
 
-          <div class="toolbar">
-            <select id="hist-filter-type">
-              <option value="all">All types</option>
-              <option value="Fever / Infection">Fever / Infection</option>
-              <option value="Injury">Injury</option>
-              <option value="Allergy">Allergy</option>
-              <option value="Hospitalisation">Hospitalisation</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          <table id="history-table">
+          <table>
             <thead>
               <tr>
                 <th>Date</th>
                 <th>Type</th>
                 <th>Summary</th>
-                <th>Doctor / Hospital</th>
+                <th>Doctor</th>
               </tr>
             </thead>
             <tbody id="historyBody">
-              <tr>
-                <td colspan="4" class="table-empty">Loading history…</td>
-              </tr>
+              <tr><td colspan="4" class="table-empty">No history yet.</td></tr>
             </tbody>
           </table>
         </div>
@@ -341,7 +337,7 @@
     </main>
   </div>
 
-  <div id="toast"></div>
+  <div id="toast" class="toast"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -355,15 +351,12 @@
 
     function showToast(message, type = "success") {
       const toast = document.getElementById("toast");
-      toast.textContent = "";
-      toast.className = "";
+      toast.textContent = message;
+      toast.className = "toast";
       if (type === "error") toast.classList.add("error");
-      toast.innerHTML = (type === "error" ? "⚠️ " : "✅ ") + message;
       toast.classList.add("show");
       clearTimeout(showToast._timeoutId);
-      showToast._timeoutId = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
+      showToast._timeoutId = setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
     function setButtonLoading(buttonId, isLoading, defaultText) {
@@ -371,7 +364,7 @@
       if (!btn) return;
       if (isLoading) {
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner" style="width:12px;height:12px;border-radius:999px;border:2px solid rgba(248,250,252,0.5);border-top-color:#f9fafb;display:inline-block;animation:spin 0.7s linear infinite;"></span><span>Saving...</span>';
+        btn.innerHTML = '<span style="width:12px;height:12px;border-radius:999px;border:2px solid rgba(199,210,254,0.6);border-top-color:white;display:inline-block;animation:spin 0.7s linear infinite;"></span><span>Saving...</span>';
       } else {
         btn.disabled = false;
         btn.innerHTML = '<span>' + defaultText + '</span>';
@@ -472,11 +465,15 @@
 
       if (!type || !summary) return;
 
+      const user = await getCurrentUser();   // 👈 get user
+      if (!user) return;
+
       setButtonLoading("history-submit-btn", true, "Save record");
 
       const { error } = await sb
         .from("medical_history")
         .insert({
+          user_id: user.id,                 // 👈 IMPORTANT
           date: date,
           type: type,
           summary: summary,
@@ -496,11 +493,7 @@
 
       e.target.reset();
       showToast("Medical history saved");
-
-      const user = await getCurrentUser();
-      if (user) {
-        await loadHistory(user.id);
-      }
+      await loadHistory(user.id);
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
